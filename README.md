@@ -2,13 +2,13 @@
 
 `gulp build` - **сборка проекта**  
 `gulp` - **запускает watcher**  
+`gulp clear` - **удаление папки assets**  
 
-#### Tasks
+## Tasks
 ##### Сборка
 `gulp styles` - **сборка стилей**  
 `gulp scripts` - **сборка скриптов**  
 `gulp images` - **сборка картинок**  
-`gulp clear` - **удаление папки assets**  
 
 ##### Watcher
 `gulp watchStyles` - **запускает watcher для стилей**  
