@@ -1,4 +1,5 @@
 const {src, dest, watch, series} = require('gulp')
+const browserSync = require('browser-sync').create()
 
 // SCSS
 const sass = require('gulp-sass')(require('sass'))
@@ -54,6 +55,7 @@ function html() {
   return src(path.src.html)
     .pipe(fileInclude())
     .pipe(dest(path.build.html))
+    .pipe(browserSync.stream())
 }
 
 function styles() {
@@ -69,6 +71,7 @@ function styles() {
     }))
     .pipe(sourceMaps.write('./'))
     .pipe(dest(path.build.css))
+    .pipe(browserSync.stream())
 }
 
 function scripts() {
@@ -82,24 +85,28 @@ function scripts() {
     }))
     .pipe(sourceMaps.write('./'))
     .pipe(dest(path.build.js))
+    .pipe(browserSync.stream())
 }
 
 function images() {
   return src(path.src.img, { allowEmpty: true })
     .pipe(tinify('jw6vTCCMhzVVd9n7t4fHs5TwsjrrPfyS'))
     .pipe(dest(path.build.img))
+    .pipe(browserSync.stream())
 }
 
 function fontsWoff() {
   return src(path.src.fonts, { allowEmpty: true })
     .pipe(ttf2woff())
     .pipe(dest(path.build.fonts))
+    .pipe(browserSync.stream())
 }
 
 function fontsWoff2() {
   return src(path.src.fonts, { allowEmpty: true })
     .pipe(ttf2woff2())
     .pipe(dest(path.build.fonts))
+    .pipe(browserSync.stream())
 }
 
 function clear() {
@@ -112,9 +119,11 @@ function startWatch() {
   watch(path.watch.css, styles)
   watch(path.watch.js, scripts)
   watch(path.watch.img, images)
+  watch(path.watch.fonts, fontsWoff)
+  watch(path.watch.fonts, fontsWoff2)
 }
 
-function watchStyles() {
+function watchHtml() {
   watch(path.watch.html, html)
 }
 
@@ -126,19 +135,26 @@ function watchScripts() {
   watch(path.watch.js, scripts)
 }
 
-function watchImages() {
-  watch(path.watch.img, images)
+function live() {
+  browserSync.init({
+    server: {
+      baseDir: './',
+    },
+    notify: false,
+  })
+  startWatch()
 }
 
+exports.live = live
 exports.html = html
 exports.styles = styles
 exports.scripts = scripts
 exports.images = images
 exports.fonts = series(fontsWoff, fontsWoff2)
 exports.clear = clear
+exports.watchHtml = watchHtml
 exports.watchStyles = watchStyles
 exports.watchScripts = watchScripts
-exports.watchImages = watchImages
 
 exports.build = series(clear, html, styles, scripts, images, fontsWoff, fontsWoff2)
 exports.default = startWatch
