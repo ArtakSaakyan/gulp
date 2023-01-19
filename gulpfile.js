@@ -148,6 +148,8 @@ function startWatch() {
   watch(path.watch.img, images)
   watch(path.watch.fonts, fontsWoff)
   watch(path.watch.fonts, fontsWoff2)
+  watch(path.watch.vendorCSS, vendorCSS)
+  watch(path.watch.vendorJS, vendorJS)
 }
 
 function watchHtml() {
