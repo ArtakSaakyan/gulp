@@ -1,6 +1,9 @@
 const {src, dest, watch, series} = require('gulp')
 const browserSync = require('browser-sync').create()
 
+// HTML
+const formatHTML = require(`gulp-format-html`)
+
 // SCSS
 const sass = require('gulp-sass')(require('sass'))
 const groupMediaQueries = require('gulp-group-css-media-queries')
@@ -27,7 +30,7 @@ const pathDest = './assets/'
 
 const path = {
   src: {
-    html:  pathSrc + '**/*.html',
+    html:  pathSrc + '*.html',
     css:   pathSrc + 'scss/main.scss',
     js:    pathSrc + 'js/main.js',
     img:   pathSrc + 'images/**/*.+(jpg|png|webp|gif)',
@@ -54,6 +57,7 @@ const path = {
 function html() {
   return src(path.src.html)
     .pipe(fileInclude())
+    .pipe(formatHTML())
     .pipe(dest(path.build.html))
     .pipe(browserSync.stream())
 }
